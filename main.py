@@ -1,5 +1,4 @@
 from functools import wraps
-
 from flask import Flask, render_template, redirect, url_for, flash, abort
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
@@ -51,6 +50,7 @@ gravatar = Gravatar(app,
                     use_ssl=False,
                     base_url=None)
 
+
 ##CONFIGURE TABLES
 
 class User(UserMixin, db.Model):
@@ -93,6 +93,7 @@ db.create_all()
 
 
 @app.route('/')
+@login_required
 def get_all_posts():
     posts = BlogPost.query.all()
     return render_template("index.html", all_posts=posts)
@@ -135,6 +136,7 @@ def logout():
 
 
 @app.route("/post/<int:post_id>", methods=['GET', 'POST'])
+@login_required
 def show_post(post_id):
     form = CommentForm()
     requested_post = BlogPost.query.get(post_id)
